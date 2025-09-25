@@ -2,7 +2,7 @@
 
 ## Special use for me:
 
-3) Pull the weekly lab branch from the course repo (read-only)
+Pull the weekly lab branch from the course repo (read-only)
 
 Each week, get the lab branch from upstream and base your work on it:
 
