@@ -296,7 +296,9 @@ class EMNISTDataProvider(DataProvider):
 
         """
         
-        raise NotImplementedError
+        smoothed_targets = np.full((int_targets.shape[0], self.num_classes), alpha / (self.num_classes - 1))
+        smoothed_targets[range(int_targets.shape[0]), int_targets] = 1 - alpha
+        return smoothed_targets
   
     
 

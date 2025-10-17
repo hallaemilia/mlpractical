@@ -1,5 +1,5 @@
 %% REPLACE SXXXXXX with your student number
-\def\studentNumber{SXXXXXX}
+\def\studentNumber{S2816575}
 
 
 %% START of YOUR ANSWERS
@@ -22,11 +22,11 @@
 
 %% - - - - - - - - - - - - TEXT QUESTIONS - - - - - - - - - - - - 
 
-
+%%Question 1 - Explain what these figures contain and how the curves evolve, and spot where overfitting occurs. Reason based on the min/max points and velocities (direction and magnitude of change) of the accuracy and error curves
 
 %% Question 1:
 \newcommand{\questionOne} {
-\youranswer{Question 1 - Explain what these figures contain and how the curves evolve, and spot where overfitting occurs. Reason based on the min/max points and velocities (direction and magnitude of change) of the accuracy and error curves}
+\youranswer{the training and validation accuracy curves from a 100 epoch run on our baseline model (which has 2 hidden layers and 128 hidden units each), are growing fast the first few epochs, but around epoch 5 we see a slowdown in growth and the validation accuracy stops increasing and begins to plateau, indicating overfitting. By epoch 40 it is steadily decreasing. Meanwhile, the training accuracy keeps increasing. The training accuracy levels out at around 95\% accuracy, while the validation accuracy levels out at around 82\% accuracy, which is significantly worse performance. Figure \ref{fig:example_errorcurves} shows the the error curves for both the training and validation sets, for the same baseline model, decrease over epochs to begin with, but at around epoch 5 the validation error stops decreasing and by epoch 10 it is rapidly increasing, indicating that being the point where overfitting begins to occur. The training error continues to decrese throughout the epochs, levelling out at around 0.1 around epoch 50, while the validation error continues to grow beyond 1.6. This is a clear indication of overfitting, as the model is learning the training data too well and is not generalising to the validation data.}
 }
 
 %% Question 2:
