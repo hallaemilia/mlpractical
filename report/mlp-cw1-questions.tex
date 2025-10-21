@@ -26,27 +26,32 @@
 
 %% Question 1:
 \newcommand{\questionOne} {
-\youranswer{the training and validation accuracy curves from a 100 epoch run on our baseline model (which has 2 hidden layers and 128 hidden units each), are growing fast the first few epochs, but around epoch 5 we see a slowdown in growth and the validation accuracy stops increasing and begins to plateau, indicating overfitting. By epoch 40 it is steadily decreasing. Meanwhile, the training accuracy keeps increasing. The training accuracy levels out at around 95\% accuracy, while the validation accuracy levels out at around 82\% accuracy, which is significantly worse performance. Figure \ref{fig:example_errorcurves} shows the the error curves for both the training and validation sets, for the same baseline model, decrease over epochs to begin with, but at around epoch 5 the validation error stops decreasing and by epoch 10 it is rapidly increasing, indicating that being the point where overfitting begins to occur. The training error continues to decrese throughout the epochs, levelling out at around 0.1 around epoch 50, while the validation error continues to grow beyond 1.6. This is a clear indication of overfitting, as the model is learning the training data too well and is not generalising to the validation data.}
+\youranswer{the training and validation accuracy curves from a 100 epoch run on our baseline model (which has 2 hidden layers and 128 hidden units each), are growing fast the first few epochs, but around epoch 5 we see a slowdown in growth and the validation accuracy stops increasing and begins to plateau, indicating overfitting. By epoch 40 it is steadily decreasing. Meanwhile, the training accuracy keeps increasing. The training accuracy levels out at around 95\% accuracy, while the validation accuracy levels out at around 82\% accuracy, which is significantly worse performance. Figure \ref{fig:example_errorcurves} shows the the error curves for both the training and validation sets, for the same baseline model, decrease over epochs to begin with, but at around epoch 5 the validation error stops decreasing and by epoch 10 it is rapidly increasing, indicating that being the point where overfitting begins to occur. The training error continues to decrese throughout the epochs, levelling out at around 0.1 around epoch 50, while the validation error continues to grow beyond 1.6. This is a clear indication of overfitting, as the model is learning the training data too well and is not generalising to the validation data}
 }
+
+%Question 2 - Present your network width experiment results by using the relevant figure and table
 
 %% Question 2:
 \newcommand{\questionTwo} {
-\youranswer{Question 2 - Present your network width experiment results by using the relevant figure and table}
+\youranswer{varying the number of hidden units has a significant ($\sim0.3$ difference in final validation error values) on the error and accuracy curves. The final validation error of the model trained on $128$ hidden layer units is $0.973$ while the final validation errors of the other models is around $\sim 0.700$. However, the training error is the smallest, at $0.156$, for the $128$ hidden layer unit model and the highest for the $32$ hidden layer unit model. Indicating that the model has overfit to the data for the $128$ unit case. We observe also that the validation error curve for the 128 unit model}
 }
 
+%Question 3 - Discuss whether varying width affects the results in a consistent way, and whether the results are expected and match well with the prior knowledge (by which we mean your expectations as are formed from the relevant Theory and literature
 %% Question 3:
 \newcommand{\questionThree} {
-\youranswer{Question 3 - Discuss whether varying width affects the results in a consistent way, and whether the results are expected and match well with the prior knowledge (by which we mean your expectations as are formed from the relevant Theory and literature)}
+\youranswer{Our findings clearly indicate that varying the number of hidden units affects the results in a consistent manner. As we increase the number of hidden units from 32 to 64, we observe an improvement in validation accuracy from 78.4\% to 80.7\%, and a corresponding decrease in both training and validation error. This trend continues as we further increase the hidden units to 128, where we achieve a validation accuracy of 80.2\%. However, it is important to note that while the training error decreases significantly with more hidden units, the validation error does not follow the same trend, indicating potential overfitting at higher capacities. These results align well with established theories in neural network literature, which suggest that increasing model capacity can lead to better performance up to a certain point, beyond which overfitting may occur if not properly regularized. Overall, our expectations based on prior knowledge are confirmed by our experimental results}
 }
 
+% Question 4 - Present your network depth experiment results by using the relevant figure and table
 %% Question 4:
 \newcommand{\questionFour} {
-\youranswer{Question 4 - Present your network depth experiment results by using the relevant figure and table}
+\youranswer{varying the number of hidden layers has a significant ($\sim0.3$ difference in final validation error values) on the error and accuracy curves. We observe that the final training error value for the $3$ hidden layer model is the lowest at $0.160$, while the final validation error is the highest at $1.209$. This indicates that the model has overfit to the training data. In contrast, the $2$ hidden layer model achieves the highest validation accuracy of $81.0\%$ and a lower validation error of $0.927$. The $1$ hidden layer model performs the worst overall, with a validation accuracy of only $68.3\%$ and a high validation error of $1.163$. These results suggest that increasing depth can improve performance up to a point, but excessive depth may lead to overfitting if not properly managed}
 }
 
+% Question 5 - Discuss whether varying depth affects the results in a consistent way, and whether the results are expected and match well with the prior knowledge (by which we mean your expectations as are formed from the relevant Theory and literature
 %% Question 5:
 \newcommand{\questionFive} {
-\youranswer{Question 5 - Discuss whether varying depth affects the results in a consistent way, and whether the results are expected and match well with the prior knowledge (by which we mean your expectations as are formed from the relevant Theory and literature)}
+\youranswer{Our findings indicate that varying the number of hidden layers affects the results in a consistent manner. As we increase the depth from 1 to 2 hidden layers, we observe a significant improvement in validation accuracy from 68.3\% to 81.0\%, along with a corresponding decrease in both training and validation error. This trend suggests that adding more layers allows the model to capture more complex patterns in the data, leading to better generalization. However, when we further increase the depth to 3 hidden layers, we notice a slight increase in validation accuracy to 81.7\%, but also a substantial increase in validation error to 1.209, indicating overfitting. These results align with established theories in neural network literature, which suggest that while increasing depth can enhance model capacity and performance, it also raises the risk of overfitting if not properly regularized. Overall, our expectations based on prior knowledge are confirmed by our experimental results}
 }
 
 
@@ -91,18 +96,19 @@
 
 %% Question Figure 2:
 \newcommand{\questionFigureTwo} {
-\youranswer{Question Figure 2 - Replace the images in Figure 2 with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden units.
+\youranswer{
+%Question Figure 2 - Replace the images in Figure 2 with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden units.
 %
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
-        \includegraphics[width=\linewidth]{figures/empty_acc_curve_width.png}
+        \includegraphics[width=\linewidth]{figures/acc_curves_width.png}
         \caption{accuracy by epoch}
         \label{fig:width_acccurves}
     \end{subfigure} 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/empty_error_curve_width.png}
+        \includegraphics[width=\linewidth]{figures/error_curves_width.png}
         \caption{error by epoch}
         \label{fig:width_errorcurves}
     \end{subfigure} 
@@ -114,18 +120,19 @@
 
 %% Question Figure 3:
 \newcommand{\questionFigureThree} {
-\youranswer{Question Figure 3 - Replace these images with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden layers.
+\youranswer{
+%Question Figure 3 - Replace these images with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden layers.
 %
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
-        \includegraphics[width=\linewidth]{figures/empty_acc_curve_depth.png}
+        \includegraphics[width=\linewidth]{figures/acc_curves_height.png}
         \caption{accuracy by epoch}
         \label{fig:depth_acccurves}
     \end{subfigure} 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/empty_error_curve_depth.png}
+        \includegraphics[width=\linewidth]{figures/error_curves_height.png}
         \caption{error by epoch}
         \label{fig:depth_errorcurves}
     \end{subfigure} 
@@ -175,7 +182,7 @@
 %% Question Table 1:
 \newcommand{\questionTableOne} {
 \youranswer{
-Question Table 1 - Fill in Table 1 with the results from your experiments varying the number of hidden units.
+%Question Table 1 - Fill in Table 1 with the results from your experiments varying the number of hidden units.
 %
 \begin{table}[t]
     \centering
@@ -183,9 +190,9 @@ Question Table 1 - Fill in Table 1 with the results from your experiments varyin
     \toprule
         \# Hidden Units & Val. Acc. & Train Error & Val. Error\\
     \midrule
-         32            &    --.-   &  -.--- &   -.---            \\
-         64            &    --.-   &  -.---  &   -.---               \\
-         128           &    --.-   &  -.---  &   -.---           \\ 
+         32            &    0.784   &  0.558 &   0.699            \\
+         64            &    0.807   &  0.355  &   0.682               \\
+         128           &    0.802   &  0.156  &   0.973           \\ 
     \bottomrule
     \end{tabular}
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network widths on the EMNIST dataset.}
@@ -196,8 +203,7 @@ Question Table 1 - Fill in Table 1 with the results from your experiments varyin
 
 %% Question Table 2:
 \newcommand{\questionTableTwo} {
-\youranswer{
-Question Table 2 - Fill in Table 2 with the results from your experiments varying the number of hidden layers.
+\youranswer{%Question Table 2 - Fill in Table 2 with the results from your experiments varying the number of hidden layers.
 %
 \begin{table}[t]
     \centering
@@ -205,9 +211,9 @@ Question Table 2 - Fill in Table 2 with the results from your experiments varyin
     \toprule
         \# Hidden Layers & Val. Acc. & Train Error & Val. Error \\
     \midrule
-         1               &      --.-      &   -.--- & -.---                \\
-         2               &      --.-      &   -.--- & -.---                \\
-         3               &      --.-      &   -.--- & -.---                \\ 
+         1               &      0.683      &   0.990 & 1.163                \\
+         2               &      0.810      &   0.221 & 0.927                \\
+         3               &      0.817      &   0.160 &   1.209              \\ 
     \bottomrule
     \end{tabular}
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network depths on the EMNIST dataset.}

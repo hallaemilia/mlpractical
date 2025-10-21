@@ -64,22 +64,22 @@ class Optimiser(object):
         layers = []
         all_grads = []
         obtained_grads = False
-        with self.tqdm_progress(total=self.train_dataset.num_batches) as train_progress_bar:
-            train_progress_bar.set_description("Ep Prog")
-            for inputs_batch, targets_batch in self.train_dataset:
-                activations = self.model.fprop(inputs_batch)
-                grads_wrt_outputs = self.error.grad(activations[-1], targets_batch)
-                grads_wrt_params = self.model.grads_wrt_params(
-                    activations, grads_wrt_outputs)
-                self.learning_rule.update_params(grads_wrt_params)
-                train_progress_bar.update(1)
-                if not obtained_grads:
-                    all_grads = []
-                    all_grads.extend(grads_wrt_params)
-                    for i, grad in enumerate(all_grads):
-                        all_grads[i] = np.abs(grad).mean()
-                    layers.extend([f"Layer_{i+1}" for i in range(len(grads_wrt_params))])
-                    obtained_grads = True
+        # with self.tqdm_progress(total=self.train_dataset.num_batches) as train_progress_bar:
+            # train_progress_bar.set_description("Ep Prog")
+        for inputs_batch, targets_batch in self.train_dataset:
+            activations = self.model.fprop(inputs_batch)
+            grads_wrt_outputs = self.error.grad(activations[-1], targets_batch)
+            grads_wrt_params = self.model.grads_wrt_params(
+                activations, grads_wrt_outputs)
+            self.learning_rule.update_params(grads_wrt_params)
+            # train_progress_bar.update(1)
+            if not obtained_grads:
+                all_grads = []
+                all_grads.extend(grads_wrt_params)
+                for i, grad in enumerate(all_grads):
+                    all_grads[i] = np.abs(grad).mean()
+                layers.extend([f"Layer_{i+1}" for i in range(len(grads_wrt_params))])
+                obtained_grads = True
         self.layers.append(layers)
         self.all_grads.append(all_grads)
 
@@ -178,7 +178,9 @@ class Optimiser(object):
                 epoch_time = time.time()- start_time
                 if epoch % stats_interval == 0:
                     stats = self.get_epoch_stats()
-                    self.log_stats(epoch, epoch_time, stats)
+                    if (epoch == 1 or epoch == 50 or epoch == 100):
+                        self.log_stats(epoch, epoch_time, stats)
+                #     # self.log_stats(epoch, epoch_time, stats)
                     run_stats.append(list(stats.values()))
                 progress_bar.update(1)
         finish_train_time = time.time()
