@@ -225,7 +225,7 @@
 %% Question Table 3:
 \newcommand{\questionTableThree} {
 \youranswer{
-Question Table 3 - Fill in Table 3 with the results from your experiments for the missing hyperparameter values for each of L1 regularisation, L2 regularisation, Dropout and label smoothing (use the values shown on the table).
+% Question Table 3 - Fill in Table 3 with the results from your experiments for the missing hyperparameter values for each of L1 regularisation, L2 regularisation, Dropout and label smoothing (use the values shown on the table).
 %
 \begin{table*}[t]
     \centering
@@ -238,23 +238,23 @@ Question Table 3 - Fill in Table 3 with the results from your experiments for th
     \midrule
         \multirow{4}*{Dropout}
                  & 0.6                   &  80.7                &      0.549 & 0.593     \\
-                 & 0.7 & --.- & -.--- & -.---  \\
+                 & 0.7 & 0.841 & 0.348 & 0.464  \\
                  & 0.85 & 85.1 &  0.329 &  0.434 \\
                  & 0.97 & 85.4 &  0.244 & 0.457  \\
     \midrule
         \multirow{4}*{L1 penalty}
                  & 5e-4 & 79.5 & 0.642 & 0.658 \\
-                 & 1e-3 & --.- & -.--- & -.--- \\
+                 & 1e-3 & 0.733 & 0.883 & 0.894 \\
                  & 5e-3 & 2.41 & 3.850 & 3.850 \\
                  & 5e-2 & 2.20 & 3.850 & 3.850 \\
     \midrule
         \multirow{4}*{L2 penalty}  
                  & 5e-4 & 85.1 & 0.306 & 0.460 \\
-                 & 1e-3 & --.- & -.--- & -.--- \\
+                 & 1e-3 & 0.849 & 0.356 & 0.453 \\
                  & 5e-3 & 81.3 & 0.586 & 0.607 \\
                  & 5e-2 & 39.2 & 2.258 & 2.256  \\
     \midrule
-        Label smoothing & 0.1 & --.- & -.--- & -.--- \\
+        Label smoothing & 0.1 & 0.834 & 0.837 & 1.230 \\
     \bottomrule
     \end{tabular}
     \caption{Results of all hyperparameter search experiments. \emph{italics} indicate the best results per series (Dropout, L1 Regularisation, L2 Regularisation, Label smoothing) and \textbf{bold} indicates the best overall.}

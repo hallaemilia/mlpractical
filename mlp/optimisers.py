@@ -178,7 +178,7 @@ class Optimiser(object):
                 epoch_time = time.time()- start_time
                 if epoch % stats_interval == 0:
                     stats = self.get_epoch_stats()
-                    if (epoch == 1 or epoch == 50 or epoch == 100):
+                    if (epoch % 10 == 0) or (epoch == 1):
                         self.log_stats(epoch, epoch_time, stats)
                 #     # self.log_stats(epoch, epoch_time, stats)
                     run_stats.append(list(stats.values()))
