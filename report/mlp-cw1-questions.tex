@@ -142,14 +142,15 @@
 }
 }
 
-%% Question Figure 4:
+
+%% Question Figure 4: Replace these images with figures depicting the Validation Accuracy and Generalisation Gap (difference between validation and training error) for each of the experiment results varying the Dropout inclusion rate, and L1/L2 weight penalty depicted in Table 3 (including any results you have filled in).
 \newcommand{\questionFigureFour} {
-\youranswer{Question Figure 4 - Replace these images with figures depicting the Validation Accuracy and Generalisation Gap (difference between validation and training error) for each of the experiment results varying the Dropout inclusion rate, and L1/L2 weight penalty depicted in Table 3 (including any results you have filled in).
+\youranswer{
 %
 \begin{figure*}[t]
     \centering
     \begin{subfigure}{.475\linewidth}
-        \includegraphics[width=\linewidth]{figures/empty_dropout_plot.png}
+        \includegraphics[width=\linewidth]{figures/dropout_plot.png}
         \caption{Accuracy and error by inclusion probability.}
         \label{fig:dropoutrates}
     \end{subfigure} 
@@ -190,8 +191,8 @@
     \toprule
         \# Hidden Units & Val. Acc. & Train Error & Val. Error\\
     \midrule
-         32            &    0.784   &  0.558 &   0.699            \\
-         64            &    0.807   &  0.355  &   0.682               \\
+         32            &    0.790   &  0.552 &   0.700            \\
+         64            &    0.807   &  0.350  &   0.678               \\
          128           &    0.802   &  0.156  &   0.973           \\ 
     \bottomrule
     \end{tabular}
