@@ -1,7 +1,7 @@
 # from mlp.learning_rules import AdamLearningRuleWithWeightDecay
 # from mlp.schedulers import CosineAnnealingWithWarmRestarts
 from mlp.layers import DropoutLayer
-from mlp.penalties import L1Penalty, L2Penalty
+from mlp.penalties import L1Penalty, L2Penalty, L1L2MixPenalty
 import numpy as np
 import os
 
@@ -35,8 +35,6 @@ def test_dropout_layer():
 
 
 def test_L1_Penalty():
-    
-
     rng = np.random.RandomState(92019)
     
     x = rng.normal(loc=0, scale=5.0, size=(50, 3, 64, 64))
@@ -80,4 +78,3 @@ def test_L2_Penalty():
     grad_test = np.allclose(correct_outputs['L2Penalty_grad_correct'], grads)
 
     return __call__test, out, correct_outputs['L2Penalty___call__correct'], grad_test, grads, correct_outputs['L2Penalty_grad_correct']
-

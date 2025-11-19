@@ -55,9 +55,36 @@
 }
 
 
-%% Question 6:
+%% Question 6: Explain how one could use a combination of L1 and L2 regularisation. Discuss any potential benefits of this approach. Present an equation for this combined loss function and explain all relevant variables and hyperparameters.
 \newcommand{\questionSix} {
-\youranswer{Question 6 - Explain how one could use a combination of L1 and L2 regularisation. Discuss any potential benefits of this approach. Present an equation for this combined loss function and explain all relevant variables and hyperparameters.}
+    \youranswer{
+    We consider a combined regularisation approach that incoporates both L1 and L2 penalties to leverage the strengths of each method. A naive combination would simply add both penalties to the loss function, namely: 
+    \begin{equation}\label{eq:L1L2Naive}
+        \mathcal{L} = \mathcal{L}_{CE} + + \lambda ||w||_1| + \lambda ||w||^2_2
+    \end{equation}
+    where $\mathcal{L}_{CE}$ is the cross-entropy loss, $w_i$ are the model weights, and $\lambda$ is a hyperparameter controlling the strength of the penalization. While this approach is straightforward, it may not fully exploit the complementary benefits of L1 and L2 regularisation. The gradient contributions from both penalties could interfere with each other, potentially leading to suboptimal weight updates.
+
+    % Get the adam rule and add each component,
+    Using Adam's Learning rule, the gradient update for weight $w_i$ at time step $t$ would be: 
+    \begin{align*}
+        m_t & = \beta_1 m_{t-1} + (1 - \beta_1) \nabla_{w_i} \mathcal{L} \\
+        v_t & = \beta_2 v_{t-1} + (1 - \beta_2) (\nabla_{w_i} \mathcal{L})^2 \\
+        \hat{m}_t & = \frac{m_t}{1 - \beta_1^t} \\
+        \hat{v}_t & = \frac{v_t}{1 - \beta_2^t} \\
+        w_i & = w_i - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}
+    \end{align*}
+    where $\eta$ is the learning rate, $\beta_1$ and $\beta_2$ are the exponential decay rates for the moment estimates, and $\epsilon$ is a small constant to prevent division by zero. We have: \begin{align*}
+        \nabla_{w_i} \mathcal{L} & = \nabla_{w_i} \mathcal{L}_{CE} + \lambda \cdot sign(w_i) + 2\lambda w_i
+    \end{align*}
+    % Show that L1 and L2 to not contribute equally
+    Thus, we see that the L2 regularisation term scales with the weight magnitude, while the L1 term contributes a constant gradient based on the sign of the weight. This means that for small weights, the L1 term will dominate, promoting sparsity, while for larger weights, the L2 term will have a more significant effect, encouraging smaller weight magnitudes. However, since we start with small weights and L2 continuously tries to keep them minimized, L2 may struggle to have a significant effect unless weights grow larger during training, potentially limiting the benefits of L2 regularisation.
+    % Propose adding another hyperparameter which is the balance /reference the original paper
+    To mitiage these issues, we apply Elastic Net reguralisation, which combine the L1 and L2 penalties in a weighted manner~\cite{L1L2_combined}:
+    \begin{align}
+        \mathcal{L} = \mathcal{L}_{CE} + + \lambda (\alpha ||w||_1|) + \lambda ((1 - \alpha ) \frac{1}{2} ||w||^2_2)
+    \end{align}
+    where $\alpha \in [0, 1]$ is a hyperparameter that controls the balance between L1 and L2 regularisation. $\alpha = 1$ corresponds to pure L1 regularisation, while $\alpha = 0$ corresponds to pure L2 regularisation. By tuning $\alpha$, we can adjust the influence of each regularisation method, allowing us to harness the sparsity-inducing properties of L1 while still benefiting from the weight decay effects of L2. This approach provides a more flexible and effective way to regularise neural networks, potentially leading to improved generalisation performance
+    }
 }
 
 
@@ -96,7 +123,7 @@
 
 %% Question Figure 2:
 \newcommand{\questionFigureTwo} {
-\youranswer{
+% \youranswer{
 %Question Figure 2 - Replace the images in Figure 2 with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden units.
 %
 \begin{figure}[t]
@@ -115,12 +142,12 @@
     \caption{Training and validation curves in terms of classification accuracy (a) and cross-entropy error (b) on the EMNIST dataset for different network widths.}
     \label{fig:width}
 \end{figure} 
-}
+% }
 }
 
 %% Question Figure 3:
 \newcommand{\questionFigureThree} {
-\youranswer{
+% \youranswer{
 %Question Figure 3 - Replace these images with figures depicting the accuracy and error, training and validation curves for your experiments varying the number of hidden layers.
 %
 \begin{figure}[t]
@@ -139,13 +166,13 @@
     \caption{Training and validation curves in terms of classification accuracy (a) and cross-entropy error (b) on the EMNIST dataset for different network depths.}
     \label{fig:depth}
 \end{figure} 
-}
+% }
 }
 
 
 %% Question Figure 4: Replace these images with figures depicting the Validation Accuracy and Generalisation Gap (difference between validation and training error) for each of the experiment results varying the Dropout inclusion rate, and L1/L2 weight penalty depicted in Table 3 (including any results you have filled in).
 \newcommand{\questionFigureFour} {
-\youranswer{
+% \youranswer{
 %
 \begin{figure*}[t]
     \centering
@@ -156,14 +183,14 @@
     \end{subfigure} 
     \begin{subfigure}{.475\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/empty_wd_plot.png}
+        \includegraphics[width=\linewidth]{figures/wd_plot.png}
         \caption{Accuracy and error by weight penalty.}
         \label{fig:weightrates}
     \end{subfigure} 
     \caption{Accuracy and error by regularisation strength of each method (Dropout and L1/L2 Regularisation).}
     \label{fig:hp_search}
 \end{figure*}
-}
+% }
 }
 
 %% Question Figure 5:
@@ -182,7 +209,7 @@
 
 %% Question Table 1:
 \newcommand{\questionTableOne} {
-\youranswer{
+% \youranswer{
 %Question Table 1 - Fill in Table 1 with the results from your experiments varying the number of hidden units.
 %
 \begin{table}[t]
@@ -199,7 +226,7 @@
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network widths on the EMNIST dataset.}
     \label{tab:width_exp}
 \end{table}
-}
+% }
 }
 
 %% Question Table 2:
@@ -212,9 +239,9 @@
     \toprule
         \# Hidden Layers & Val. Acc. & Train Error & Val. Error \\
     \midrule
-         1               &      0.683      &   0.990 & 1.163                \\
-         2               &      0.810      &   0.221 & 0.927                \\
-         3               &      0.817      &   0.160 &   1.209              \\ 
+         1 & 0.683 & 0.990 & 1.163 \\
+         2 & 0.810 & 0.221 & 0.927 \\
+         3 & 0.817 & 0.160 & 1.209 \\ 
     \bottomrule
     \end{tabular}
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network depths on the EMNIST dataset.}
@@ -225,7 +252,7 @@
 
 %% Question Table 3:
 \newcommand{\questionTableThree} {
-\youranswer{
+% \youranswer{
 % Question Table 3 - Fill in Table 3 with the results from your experiments for the missing hyperparameter values for each of L1 regularisation, L2 regularisation, Dropout and label smoothing (use the values shown on the table).
 %
 \begin{table*}[t]
@@ -261,14 +288,33 @@
     \caption{Results of all hyperparameter search experiments. \emph{italics} indicate the best results per series (Dropout, L1 Regularisation, L2 Regularisation, Label smoothing) and \textbf{bold} indicates the best overall.}
     \label{tab:hp_search}
 \end{table*}
-}
+% }
 }
 
 
-%% Question Table 4:
+%% Question Table 4: Add a table with the results from your 4 experiments (by which we mean: 4 training runs, NOT 4 sets of experiments) varying your hyperparameters for the combination of L1 and L2 regularisation (based on your implementation).
 \newcommand{\questionTableFour} {
 \youranswer{
-Question Table 4 - Add a table with the results from your 4 experiments (by which we mean: 4 training runs, NOT 4 sets of experiments) varying your hyperparameters for the combination of L1 and L2 regularisation (based on your implementation).
+    \begin{table*}[t]
+    \centering
+    \begin{tabular}{c|cc|ccc}
+    \toprule
+        Model    & \multicolumn{2}{c|}{Hyperparameters} & Validation accuracy & Train Error & Validation Error \\
+                  & $\lambda$ &$\alpha$ & & & \\
+    \midrule
+    \midrule
+        Baseline &  --  &   -- & 0.837 &  0.241 &  0.533  \\
+    \midrule
+        \multirow{4}*{L1 and L2 penalty mixed}
+                 & $5\times 10^{-4}$ & 0.25 &  80.7 & .549 & 0.593     \\
+                 & $5\times 10^{-3}$ & 0.50 & 0.841 & 0.348 & 0.464  \\
+                 & $5\times 10^{-3}$ & 0.75 & 85.1 &  0.329 &  0.434 \\
+                 & $1\times 10^{-3}$ & 0.25 & 85.4 &  0.244 & 0.457  \\
+    \bottomrule
+    \end{tabular}
+    \caption{Results of all hyperparameter search experiments for combined L1 and L2 regularisation. \emph{italics} indicate the best results per series and \textbf{bold} indicates the best overall. $\lambda$ is our hyperparameter controlling the overall strength of regularisation, while $\alpha$ is the mixing coefficient, controls the balance between L1 and L2 penalties.}
+    \label{tab:l1l2_hp_search}
+\end{table*}
 }
 }
 

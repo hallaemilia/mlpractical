@@ -10,8 +10,6 @@ or batch.
 """
 
 import numpy as np
-from mlp.penalties import L1Penalty
-
 
 class SumOfSquaredDiffsError(object):
     """Sum of squared differences (squared Euclidean distance) error."""
