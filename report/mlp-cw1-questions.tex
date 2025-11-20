@@ -29,6 +29,13 @@
 \youranswer{the training and validation accuracy curves from a 100 epoch run on our baseline model (which has 2 hidden layers and 128 hidden units each), are growing fast the first few epochs, but around epoch 5 we see a slowdown in growth and the validation accuracy stops increasing and begins to plateau, indicating overfitting. By epoch 40 it is steadily decreasing. Meanwhile, the training accuracy keeps increasing. The training accuracy levels out at around 95\% accuracy, while the validation accuracy levels out at around 82\% accuracy, which is significantly worse performance. Figure \ref{fig:example_errorcurves} shows the the error curves for both the training and validation sets, for the same baseline model, decrease over epochs to begin with, but at around epoch 5 the validation error stops decreasing and by epoch 10 it is rapidly increasing, indicating that being the point where overfitting begins to occur. The training error continues to decrese throughout the epochs, levelling out at around 0.1 around epoch 50, while the validation error continues to grow beyond 1.6. This is a clear indication of overfitting, as the model is learning the training data too well and is not generalising to the validation data}
 }
 
+% \youranswer{
+% Figures~1(a) and~1(b) show the evolution of training and validation performance over epochs for a 1-hidden-layer MLP. In Figure~1(a), the \emph{training accuracy} increases steadily throughout training, eventually approaching a high value close to saturation. In contrast, the \emph{validation accuracy} initially increases but then plateaus around epoch~[X]--[Y], after which it fluctuates slightly without any further systematic improvement.
+
+% Figure~1(b) presents the corresponding cross-entropy errors. The \emph{training error} decreases monotonically, while the \emph{validation error} initially falls but then stops decreasing and begins to level off around the same epoch range ([X]--[Y]). From that point onward, the training error continues to decrease whereas the validation error remains roughly flat or even begins to increase slightly. This divergence between the training and validation curves indicates an increasing \emph{generalisation gap}: the model fits the training data more and more closely but no longer improves---and may even worsen---on the validation set. This behaviour is consistent with the onset of overfitting.
+% }
+
+
 %Question 2 - Present your network width experiment results by using the relevant figure and table
 
 %% Question 2:
@@ -88,35 +95,72 @@
 }
 
 
-%% Question 7:
+%% Question 7: Assume you had a limited experiment budget for exactly \textbf{4} experiment runs dedicated to testing the effectiveness of your proposed combination of L1 and L2 Regularization in Section~\ref{sec:L1L2combo}. Argue for which 4 configurations to run based on any previous results or other information you consider relevant. Run those experiments and add the results in Table~4 and Figure~5 (you will then discuss those results alongside all others in the next question below).
+
+% (Even if you have not managed to implement your L1 and L2 combination; still argue based on your proposed approach).
 \newcommand{\questionSeven} {
-\youranswer{Question 7 - Assume you had a limited experiment budget for exactly \textbf{4} experiment runs dedicated to testing the effectiveness of your proposed combination of L1 and L2 Regularization in Section~\ref{sec:L1L2combo}. Argue for which 4 configurations to run based on any previous results or other information you consider relevant. Run those experiments and add the results in Table~4 and Figure~5 (you will then discuss those results alongside all others in the next question below).
-
-(Even if you have not managed to implement your L1 and L2 combination; still argue based on your proposed approach).
-
+\youranswer{
+To effectively evaluate the proposed combination of L1 and L2 regularisation within a limited budget of 4 experiment runs, we should strategically select configurations that cover a diverse range of regularisation strengths and balances. Based on prior results from individual L1 and L2 regularisation experiments, we can identify promising hyperparameter values that have shown good performance. We propose the following 4 configurations for our experiments:
+1. $\lambda = 5 \times 10^{-4}$, $\alpha = 0.25$: This configuration leans more towards L2 regularisation, which has shown to be effective in previous experiments for promoting sparsity and reducing overfitting.
+2. $\lambda = 5 \times 10^{-4}$, $\alpha = 0.50$: This balanced configuration allows us to assess the combined effects of both L1 and L2 regularisation equally, providing insights into how they interact when given equal weight.
+3. $\lambda = 5 \times 10^{-4}$, $\alpha = 0.75$: This configuration emphasizes L1 regularisation, which has been effective in controlling weight magnitudes and improving generalisation in prior experiments.
+4. $\lambda = 1 \times 10^{-3}$, $\alpha = 0.25$: 
+Evalutating mostly $\lambda = 5 \times 10^{-4}$ allows us to explore the effects of varying the balance between L1 and L2 regularisation while maintaining a moderate overall regularisation strength, furthermore, table \ref{tab:hp_search} shows the best performance for this value using both L1 and L2 reguralization. The inclusion of a higher $\lambda$ value in the fourth configuration helps us assess the impact of stronger regularisation on model performance.
+By running these configurations, we can comprehensively evaluate the effectiveness of the combined L1 and L2 regularisation approach, and the results will be presented in Table \ref{tab:l1l2_hp_search} and Figure \ref{fig:lamda_alpha_wd} for further analysis.
 }
 }
 
 
-%% Question 8:
+%% Question 8: Explain the experimental details (e.g. hyperparameters), discuss the results in terms of their generalisation performance and overfitting. Select and test the best performing model as part of this analysis.
 \newcommand{\questionEight} {
-\youranswer{Question 8 - Explain the experimental details (e.g. hyperparameters), discuss the results in terms of their generalisation performance and overfitting. Select and test the best performing model as part of this analysis.
+\youranswer{
+In our experiments combining L1 and L2 regularisation, we selected a baseline model architecture with 2 hidden layers and 128 hidden units per layer, consistent with our previous experiments. We employed the Adam optimizer with a learning rate of 0.001, and trained each model for 100 epochs, using a batch size of 100. The hyperparameters for the combined regularisation were chosen in accordance with our proposed combinations in Section \ref{sec:task2.2}. Overall, none of the experiments resulted in a improvement over our best individual regularisation methods, with the highest validation accuracy achieved being 84.35\% for the configuration with $\lambda = 5 \times 10^{-4}$ and $\alpha = 0.25$. This configuration effectively balanced the contributions of L1 and L2 regularisation, leading to a validation error of 0.4775, which is lower than that of L1 reguralized methods alone. The training error for this model was 0.4372, indicating that the model generalizes better to unseen data compareed to L2 penalty experiments only. The other configurations showed varying degrees of performance, with the model emphasizing L1 regularisation ($\alpha = 0.75$) exhibiting the lowest validation accuracy of 81.26\%, suggesting that excessive sparsity may have hindered the model's ability to capture complex patterns in the data. The configuration with a higher regularisation strength ($\lambda = 1 \times 10^{-3}$, $\alpha = 0.25$) also underperformed, achieving a validation accuracy of 82.11\%, indicating that too much regularisation can lead to underfitting. Overall, our results suggest that while combining L1 and L2 regularisation can be beneficial, careful tuning of the balance and strength of each component is crucial to achieving optimal generalisation performance.
 }
 }
 
 
-%% Question 9:
+%% Question 9: A colleague proposed using a custom activation function (which can be identified as CustomActivationLayer() in your Coursework\_1.ipynb notebook and the mlp package). Run the prepared experiment in the "Problematic Training" cell in your Coursework\_1.ipynb notebook, and display the results in Figure~6. Analyse the results. Is the model overfitting? Explain the cause of the problematic performance of the model?
 \newcommand{\questionNine} {
-\youranswer{Question 9 - A colleague proposed using a custom activation function (which can be identified as CustomActivationLayer() in your Coursework\_1.ipynb notebook and the mlp package). Run the prepared experiment in the "Problematic Training" cell in your Coursework\_1.ipynb notebook, and display the results in Figure~6. Analyse the results. Is the model overfitting? Explain the cause of the problematic performance of the model?
+\youranswer{
+    Figure \ref{fig:custom-activation} presents the results of the experiment using the custom activation function in Wquation \ref{eq:custom_activation} blow:
+    \begin{equation}\label{eq:custom_activation}
+        f(x) = \frac{1}{20\cdot (1 + e^{-\bm{x}})}
+    \end{equation}
+    where $\bm{x}$ is the input to the activation function. Figure \ref{fig:custom-activation-error} shows the training and validation error curves, while Figure \ref{fig:custom-activation-accuracy} displays the corresponding accuracy curves. Additionally, Figure \ref{fig:custom-activation-gradflow} illustrates the gradient flow across layers during training. The training error decreases steadily over epochs, indicating that the model is learning from the training data. However, the validation error initially decreases but then starts to stagnate at around epoch 40, suggesting that the model is not generalizing well to unseen data. Furthermore, the validation accuracy plateaus at around 24\%, which is significantly lower than our baseline models, indicating poor performance. The gradient flow analysis reveals that the gradients diminish rapidly as they propagate through the layers, leading to vanishing gradients. Equation \ref{eq:custom_activation} can be rewritten as:
+    \begin{equation}
+        f(x) = \frac{1}{20} \cdot \sigma(x)
+    \end{equation}
+    where $\sigma(x)$ is the standard sigmoid activation function.
+    Note that \begin{align*}
+        f(x): \mathbb{R} \to \frac{1}{20} \cdot [0, 1] = [0, 0.05]
+    \end{align*}
+    Furthermore, the derivative of this custom activation function is given by:
+    \begin{equation}
+        f'(x) = \frac{1}{20} \cdot \sigma(x) \cdot (1 - \sigma(x))
+    \end{equation}
+    For our networks, to minimize the loss we use gradient descent through back propagation. Thus, for example, the gradient of the loss at the first layer is given by \begin{align*}
+        \frac{\partial \mathcal{L}}{\partial w_1} = \frac{\partial \mathcal{L}}{\partial a_n} \cdot \frac{\partial a_n}{\partial a_{n-1}} \cdots \frac{\partial a_2}{\partial a_1} \cdot \frac{\partial a_1}{\partial w_1}
+    \end{align*}
+    where $a_i$ is the activation at layer $i$, $n$ is the number of layers, and $w_1$ are the weights at the first layer. Each term $\frac{\partial a_i}{\partial a_{i-1}}$ includes the derivative of the activation function $f'(x)$. Since $f'(x)$ is scaled down by a factor of $\frac{1}{20}$. The maximum value of the derivative occurs at $x = 0$, where $\sigma(0) = \frac{1}{2}$, yielding:
+    \begin{equation}
+        f'(0) = \frac{1}{20} \cdot \frac{1}{2} \cdot (1 - \frac{1}{2}) = \frac{1}{80} = 0.0125
+    \end{equation}
+    Thus, $\forall x\in \mathbb{R}$:
+    \begin{align*}
+        |f'(x)| \leq \text{max}_{x} |f'(x)| = 0.0125
+    \end{align*}
+    This small maximum derivative value means that during backpropagation, the gradients are significantly diminished at each layer \footnote{the maximum derivative value of the custom activation function is $0.0125$. This means that during backpropagation, each layer's gradient is multiplied by at most $0.0125$, leading to a rapid decrease in gradient magnitude as it propagates through multiple layers.}, leading to vanishing gradients. As a result, the weights in the earlier layers receive very small updates, hindering effective learning. This explains the poor performance of the model, as it struggles to learn meaningful representations from the data due to insufficient gradient flow. In conclusion, the custom activation function leads to vanishing gradients, which is the primary cause of the problematic performance observed in this experiment.
 }
 }
 
 
 
 
-%% Question 10:
+%% Question 10: Briefly draw your conclusions based on the results from the previous sections (what are the take-away messages?), discussing them in the context of the overall literature, and conclude your report with a recommendation for future directions
 \newcommand{\questionTen} {
-\youranswer{Question 10 - Briefly draw your conclusions based on the results from the previous sections (what are the take-away messages?), discussing them in the context of the overall literature, and conclude your report with a recommendation for future directions}
+\youranswer{
+    In conclusion, our experiments have demonstrated the significant impact of network architecture and regularisation techniques on the performance of neural networks. Varying the number of hidden units and layers revealed that while increasing model capacity can enhance performance, it also raises the risk of overfitting if not properly managed. The combination of L1 and L2 regularisation showed promise in balancing sparsity and weight decay, leading to improved generalisation when appropriately tuned. However, excessive regularisation can lead to underfitting, highlighting the importance of careful hyperparameter selection. Our findings align with established literature, reinforcing the notion that model complexity must be balanced with effective regularisation to achieve optimal performance. For future work, I would explore advanced regularisation techniques, as well as investigating adaptive learning rate schedules to further enhance model training and generalisation capabilities. There are many advanced architectures and training techniques that could be explored to improve performance on the EMNIST dataset and similar tasks. Today, common methods include \textit{CutOut and CutMix}~\cite{oh2024provablebenefitcutoutcutmix}, which have been proven to improve generalisation in image classification tasks. In 2022, \textit{MixupE}~\cite{zou2023mixupeunderstandingimprovingmixup} was proposed, which is an improvement of a method called \textit{Mixup} (CutMix is an extension of Mixup), which is a popular data augmentatiopn technique. Here, they performed experiments where they use a variety of large-scale image classification datasets, including ImageNet, yielding . Additionally, exploring more complex architectures such as Convolutional Neural Networks (CNNs) or Transformer-based models could yield better performance compared to the MLP architecture used in this coursework. 
+}
 }
 
 %% - - - - - - - - - - - - FIGURES - - - - - - - - - - - - 
@@ -178,13 +222,13 @@
     \centering
     \begin{subfigure}{.475\linewidth}
         \includegraphics[width=\linewidth]{figures/dropout_plot.png}
-        \caption{Accuracy and error by inclusion probability.}
+        \caption{Accuracy and error gap with varying dropout values.}
         \label{fig:dropoutrates}
     \end{subfigure} 
     \begin{subfigure}{.475\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/wd_plot.png}
-        \caption{Accuracy and error by weight penalty.}
+        \caption{Accuracy and error gap by weight penalty.}
         \label{fig:weightrates}
     \end{subfigure} 
     \caption{Accuracy and error by regularisation strength of each method (Dropout and L1/L2 Regularisation).}
@@ -193,16 +237,53 @@
 % }
 }
 
-%% Question Figure 5:
+%% Question Figure 5:Question Figure 5 - Add figures depicting the Validation Accuracy and Generalisation Gap (difference between validation and training error) for each of your 4 experiments  varying your hyperparameters for the combination of L1 and L2 regularisation (based on your implementation) depicted in Table 4.
 \newcommand{\questionFigureFive} {
-\youranswer{Question Figure 5 - Add figures depicting the Validation Accuracy and Generalisation Gap (difference between validation and training error) for each of your 4 experiments  varying your hyperparameters for the combination of L1 and L2 regularisation (based on your implementation) depicted in Table 4.
-}
+% \youranswer{
+    \begin{figure*}[t]
+    \centering
+    \begin{subfigure}{.475\linewidth}
+        \includegraphics[width=\linewidth]{figures/mix_wd_alpha_plot.png}
+        \caption{Accuracy and error gap for varying mixing ratio values.}
+        \label{fig:wd-alpha}
+    \end{subfigure} 
+    \begin{subfigure}{.475\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/mix_wd_lambda_plot.png}
+        \caption{Accuracy and error by weight penalty.}
+        \label{fig:wd-lambda}
+    \end{subfigure} 
+    \caption{Accuracy and error by regularisation strength and misxing penalty respectively of combined L1 and L2 Regularisation.}
+    \label{fig:lamda_alpha_wd}
+\end{figure*}
+% }
 }
 
-%% Question Figure 6:
+%% Question Figure 6:Add figures depicting the Training Accuracy, Error, and Gradient Flow Across Layers for the 1 experiment run with the Custom Activation function (produce these by running the "Problematic Training" cell in the Coursework\_1.ipynb notebook).
 \newcommand{\questionFigureSix} {
-\youranswer{Question Figure 6 - Add figures depicting the Training Accuracy, Error, and Gradient Flow Across Layers for the 1 experiment run with the Custom Activation function (produce these by running the "Problematic Training" cell in the Coursework\_1.ipynb notebook).
-}
+% \youranswer{
+        \begin{figure*}[t]
+    \centering
+    \begin{subfigure}{.475\linewidth}
+        \includegraphics[width=\linewidth]{figures/custom_activation_error_plot.png}
+        \caption{Training Error and Validation Error curves for the Custom Activation function experiment.}
+        \label{fig:custom-activation-error}
+    \end{subfigure}
+    \begin{subfigure}{.475\linewidth}
+        \includegraphics[width=\linewidth]{figures/custom_activation_accuracy_plot.png}
+        \caption{Training Accuracy and Validation Accuracy curves for the Custom Activation function experiment.}
+        \label{fig:custom-activation-accuracy}
+    \end{subfigure} 
+    \begin{subfigure}{.475\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/custom_activation_grad_flow_plot.png}
+        \caption{Gradient Flow Across Layers for the Custom Activation function experiment.}
+        \label{fig:custom-activation-gradflow}
+    \end{subfigure} 
+    \caption{Figures depicting the Training Accuracy, Error, and Gradient Flow Across Layers for the 1 experiment run with the Custom Activation function}
+    \label{fig:custom-activation}
+\end{figure*}
+% }
 }
 
 %% - - - - - - - - - - - - TABLES - - - - - - - - - - - - 
@@ -231,7 +312,7 @@
 
 %% Question Table 2:
 \newcommand{\questionTableTwo} {
-\youranswer{%Question Table 2 - Fill in Table 2 with the results from your experiments varying the number of hidden layers.
+% \youranswer{%Question Table 2 - Fill in Table 2 with the results from your experiments varying the number of hidden layers.
 %
 \begin{table}[t]
     \centering
@@ -247,7 +328,7 @@
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network depths on the EMNIST dataset.}
     \label{tab:depth_exps}
 \end{table}
-}
+% }
 }
 
 %% Question Table 3:
@@ -306,10 +387,10 @@
         Baseline &  --  &   -- & 0.837 &  0.241 &  0.533  \\
     \midrule
         \multirow{4}*{L1 and L2 penalty mixed}
-                 & $5\times 10^{-4}$ & 0.25 &  80.7 & .549 & 0.593     \\
-                 & $5\times 10^{-3}$ & 0.50 & 0.841 & 0.348 & 0.464  \\
-                 & $5\times 10^{-3}$ & 0.75 & 85.1 &  0.329 &  0.434 \\
-                 & $1\times 10^{-3}$ & 0.25 & 85.4 &  0.244 & 0.457  \\
+                 & $5\times 10^{-4}$ & 0.25 &  0.8435 & 0.4372 & 0.4775     \\
+                 & $5\times 10^{-4}$ & 0.50 & 0.8294 & 0.5059 & 0.5322  \\
+                 & $5\times 10^{-4}$ & 0.75 & 0.8126 &  0.5865 &  0.6096 \\
+                 & $1\times 10^{-3}$ & 0.25 & 0.8211 &  0.5379 & 0.5628  \\
     \bottomrule
     \end{tabular}
     \caption{Results of all hyperparameter search experiments for combined L1 and L2 regularisation. \emph{italics} indicate the best results per series and \textbf{bold} indicates the best overall. $\lambda$ is our hyperparameter controlling the overall strength of regularisation, while $\alpha$ is the mixing coefficient, controls the balance between L1 and L2 penalties.}

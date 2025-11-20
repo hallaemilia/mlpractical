@@ -349,6 +349,94 @@ class MetOfficeDataProvider(DataProvider):
         super(MetOfficeDataProvider, self).__init__(
             inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
 
+
+class MixupCutmixDataProvider(object):
+    """Wraps a base provider and applies Mixup and/or CutMix per batch."""
+
+    def __init__(self, base_provider, mixup_alpha=0.2, cutmix_alpha=1.0,
+                 mixup_prob=0.5, cutmix_prob=0.5, rng=None):
+        """
+        Args:
+            base_provider: DataProvider instance returning inputs and 1-of-K targets.
+            mixup_alpha: Beta distribution alpha used for Mixup.
+            cutmix_alpha: Beta distribution alpha used for CutMix.
+            mixup_prob: Probability of applying Mixup on a batch.
+            cutmix_prob: Probability of applying CutMix on a batch.
+            rng: Optional numpy RandomState.
+        """
+        self.base_provider = base_provider
+        self.mixup_alpha = mixup_alpha
+        self.cutmix_alpha = cutmix_alpha
+        self.mixup_prob = mixup_prob
+        self.cutmix_prob = cutmix_prob
+        self.rng = rng if rng is not None else np.random.RandomState(DEFAULT_SEED)
+        self.num_batches = base_provider.num_batches
+        self.batch_size = base_provider.batch_size
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return self.next()
+
+    def new_epoch(self):
+        self.base_provider.new_epoch()
+
+    def reset(self):
+        self.base_provider.reset()
+        self.num_batches = self.base_provider.num_batches
+
+    def _sample_lambda(self, alpha):
+        if alpha <= 0:
+            return 1.0
+        return self.rng.beta(alpha, alpha)
+
+    def _rand_bbox(self, width, height, lam):
+        cut_rat = np.sqrt(1. - lam)
+        cut_w = int(width * cut_rat)
+        cut_h = int(height * cut_rat)
+        cx = self.rng.randint(width)
+        cy = self.rng.randint(height)
+        x1 = np.clip(cx - cut_w // 2, 0, width)
+        y1 = np.clip(cy - cut_h // 2, 0, height)
+        x2 = np.clip(cx + cut_w // 2, 0, width)
+        y2 = np.clip(cy + cut_h // 2, 0, height)
+        return x1, y1, x2, y2
+
+    def _apply_mixup(self, inputs, targets):
+        lam = self._sample_lambda(self.mixup_alpha)
+        perm = self.rng.permutation(inputs.shape[0])
+        mixed_inputs = lam * inputs + (1. - lam) * inputs[perm]
+        mixed_targets = lam * targets + (1. - lam) * targets[perm]
+        return mixed_inputs, mixed_targets
+
+    def _apply_cutmix(self, inputs, targets):
+        flat_dim = inputs.shape[1]
+        side = int(np.sqrt(flat_dim))
+        if side * side != flat_dim:
+            # Fallback to Mixup for non-square features
+            return self._apply_mixup(inputs, targets)
+
+        lam = self._sample_lambda(self.cutmix_alpha)
+        perm = self.rng.permutation(inputs.shape[0])
+        x1, y1, x2, y2 = self._rand_bbox(side, side, lam)
+        inputs_view = inputs.reshape(-1, side, side)
+        mixed = inputs_view.copy()
+        mixed[:, y1:y2, x1:x2] = inputs_view[perm, y1:y2, x1:x2]
+        lam_adjusted = 1. - ((x2 - x1) * (y2 - y1) / (side * side))
+        mixed_targets = lam_adjusted * targets + (1. - lam_adjusted) * targets[perm]
+        return mixed.reshape(inputs.shape), mixed_targets
+
+    def next(self):
+        inputs_batch, targets_batch = self.base_provider.next()
+        prob = self.rng.rand()
+        if prob < self.mixup_prob:
+            return self._apply_mixup(inputs_batch, targets_batch)
+        if prob < self.mixup_prob + self.cutmix_prob:
+            return self._apply_cutmix(inputs_batch, targets_batch)
+        return inputs_batch, targets_batch
+
+
 class CCPPDataProvider(DataProvider):
 
     def __init__(self, which_set='train', input_dims=None, batch_size=10,
