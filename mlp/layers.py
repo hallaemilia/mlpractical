@@ -682,6 +682,8 @@ class DropoutLayer(StochasticLayer):
             share_across_batch: Whether to use same dropout mask across
                 all inputs in a batch or use per input masks.
         """
+        if rng is None:
+            rng = np.random.RandomState(DEFAULT_SEED)
         super(DropoutLayer, self).__init__(rng)
         assert incl_prob > 0. and incl_prob <= 1.
         self.incl_prob = incl_prob
